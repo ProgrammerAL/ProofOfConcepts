@@ -1,7 +1,33 @@
 ﻿@page "/"
+@using System.Diagnostics.CodeAnalysis
+@using AsyncAwaitBestPractices
+@using SignalRFileTransfer_Server.Services
+@implements IDisposable
 
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+@code
+{
+    [Inject]
+    [NotNull]
+    private IFileTransferHandler? FileTransferHandler { get; set; }
+
+    public void Dispose()
+    {
+        FileTransferHandler.FileReceived -= HandleFileReceived;
+    }
+
+    protected override void OnInitialized()
+    {
+        FileTransferHandler.FileReceived += HandleFileReceived;
+
+        base.OnInitialized();
+    }
+
+    private void HandleFileReceived(ReceivedFile _)
+    {
+        InvokeAsync(StateHasChanged).SafeFireAndForget();
+    }
+}

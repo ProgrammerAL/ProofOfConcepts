@@ -1,3 +1,5 @@
+#pragma warning disable IDE0058 // Expression value is never used
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
@@ -6,7 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-using SignalRFileTransfer_Server.Data;
+using SignalRFileTransfer_Server.Hubs;
+using SignalRFileTransfer_Server.Services;
 
 using System;
 using System.Collections.Generic;
@@ -30,7 +33,8 @@ namespace SignalRFileTransfer_Server
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
+
+            services.AddSingleton<IFileTransferHandler, FileTransferHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,7 +60,9 @@ namespace SignalRFileTransfer_Server
             {
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
+                endpoints.MapHub<FileTransferHub>("/" + nameof(FileTransferHub));
             });
         }
     }
 }
+#pragma warning restore IDE0058 // Expression value is never used
