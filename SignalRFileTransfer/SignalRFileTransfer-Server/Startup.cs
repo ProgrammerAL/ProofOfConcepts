@@ -34,6 +34,17 @@ namespace SignalRFileTransfer_Server
             services.AddRazorPages();
             services.AddServerSideBlazor();
 
+            services.AddSignalR()
+            .AddMessagePackProtocol();
+            //.AddMessagePackProtocol(options =>
+            //{
+            //    options.FormatterResolvers = new List<MessagePack.IFormatterResolver>()
+            //        {
+            //                        MessagePack.Resolvers.StandardResolver.Instance,
+            //                        MessagePack.Resolvers.DynamicEnumAsStringResolver.Instance,
+            //        };
+            //});  //Manually turn on MessagePack. Must reference NuGet: Microsoft.AspNetCore.SignalR.Protocols.MessagePack
+
             services.AddSingleton<IFileTransferHandler, FileTransferHandler>();
         }
 

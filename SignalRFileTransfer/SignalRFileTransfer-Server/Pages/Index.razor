@@ -4,9 +4,15 @@
 @using SignalRFileTransfer_Server.Services
 @implements IDisposable
 
-<h1>Hello, world!</h1>
+<h1>Known Files</h1>
 
-Welcome to your new app.
+<div id="received-files">
+    @foreach (var file in FileTransferHandler.ReceivedFiles)
+    {
+        <p>Key: @file.FileKey: Size: @file.Buffer.Length</p>
+    }
+</div>
+
 
 @code
 {
